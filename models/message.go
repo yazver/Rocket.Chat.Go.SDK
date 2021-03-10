@@ -84,7 +84,7 @@ const (
 	AttachmentActionTypeButton AttachmentActionType = "button"
 )
 
-// AttachmentAction are action buttons on message attachments
+// AttachmentAction are action buttons on message attachments.
 type AttachmentAction struct {
 	Type               AttachmentActionType  `json:"type,omitempty"`
 	Text               string                `json:"text,omitempty"`
@@ -97,7 +97,7 @@ type AttachmentAction struct {
 	MsgProcessingType  MessageProcessingType `json:"msg_processing_type,omitempty"`
 }
 
-// AttachmentActionButtonAlignment configures how the actions buttons will be aligned
+// AttachmentActionButtonAlignment configures how the actions buttons will be aligned.
 type AttachmentActionButtonsAlignment string
 
 const (

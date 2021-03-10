@@ -20,6 +20,8 @@ type Channel struct {
 	User        *User    `json:"u,omitempty"`
 	LastMessage *Message `json:"lastMessage,omitempty"`
 
+	Users []string `json:"usernames"`
+
 	// Lm          interface{} `json:"lm"`
 	// CustomFields struct {
 	// } `json:"customFields,omitempty"`
@@ -36,4 +38,15 @@ type ChannelSubscription struct {
 	User        User     `json:"u"`
 	Roles       []string `json:"roles"`
 	Unread      float64  `json:"unread"`
+}
+
+type CreateChannelRequest struct {
+	Name     string   `json:"name"`
+	Members  []string `json:"members"`
+	ReadOnly bool     `json:"readOnly"`
+}
+
+type InviteChannelRequest struct {
+	RoomID string `json:"roomId"`
+	UserID string `json:"userId"`
 }

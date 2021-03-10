@@ -1,6 +1,6 @@
 module github.com/RocketChat/Rocket.Chat.Go.SDK
 
-go 1.15
+go 1.16
 
 require (
 	github.com/Jeffail/gabs v1.4.0

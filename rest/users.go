@@ -92,7 +92,6 @@ func (c *Client) CreateToken(userID, username string) (*models.UserCredentials, 
 //
 // https://rocket.chat/docs/developer-guides/rest-api/authentication/logout
 func (c *Client) Logout() (string, error) {
-
 	if c.auth == nil {
 		return "Was not logged in", nil
 	}

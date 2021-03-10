@@ -18,7 +18,6 @@ var (
 )
 
 func getDefaultClient(t *testing.T) *Client {
-
 	if rocketClient == nil {
 		testUserEmail = common_testing.GetRandomEmail()
 		testUserName = common_testing.GetRandomString()

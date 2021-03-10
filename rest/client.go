@@ -66,7 +66,7 @@ func (s Status) OK() error {
 	return ResponseErr
 }
 
-// StatusResponse The base for the most of the json responses
+// StatusResponse The base for the most of the json responses.
 type StatusResponse struct {
 	Status
 	Channel string `json:"channel"`
@@ -95,17 +95,17 @@ func (c *Client) getUrl() string {
 	return fmt.Sprintf("%v://%v:%v%s/api/%s", c.Protocol, c.Host, c.Port, c.Path, c.Version)
 }
 
-// Get call Get
+// Get call Get.
 func (c *Client) Get(api string, params url.Values, response Response) error {
 	return c.doRequest(http.MethodGet, api, params, nil, response)
 }
 
-// Post call as JSON
+// Post call as JSON.
 func (c *Client) Post(api string, body io.Reader, response Response) error {
 	return c.doRequest(http.MethodPost, api, nil, body, response)
 }
 
-// PostForm call as Form Data
+// PostForm call as Form Data.
 func (c *Client) PostForm(api string, params url.Values, response Response) error {
 	return c.doRequest(http.MethodPost, api, params, nil, response)
 }
