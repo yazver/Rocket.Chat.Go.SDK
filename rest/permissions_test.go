@@ -1,10 +1,11 @@
 package rest
 
 import (
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/common_testing"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/common_testing"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 // you have to set access-permissions on role "user" to run this test successfully!

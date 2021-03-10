@@ -2,8 +2,8 @@ package realtime
 
 import "fmt"
 
-func (c *Client) StartTyping(roomId string, username string) error {
-	_, err := c.ddp.Call("stream-notify-room", fmt.Sprintf("%s/typing", roomId), username, true)
+func (c *Client) StartTyping(roomID string, username string) error {
+	_, err := c.ddp.Call("stream-notify-room", fmt.Sprintf("%s/typing", roomID), username, true)
 	if err != nil {
 		return err
 	}
@@ -11,8 +11,8 @@ func (c *Client) StartTyping(roomId string, username string) error {
 	return nil
 }
 
-func (c *Client) StopTyping(roomId string, username string) error {
-	_, err := c.ddp.Call("stream-notify-room", fmt.Sprintf("%s/typing", roomId), username, false)
+func (c *Client) StopTyping(roomID string, username string) error {
+	_, err := c.ddp.Call("stream-notify-room", fmt.Sprintf("%s/typing", roomID), username, false)
 	if err != nil {
 		return err
 	}

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/Jeffail/gabs"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 // GetPublicSettings gets public settings
@@ -20,7 +20,7 @@ func (c *Client) GetPublicSettings() ([]models.Setting, error) {
 
 	sett, _ := document.Children()
 
-	var settings []models.Setting
+	settings := make([]models.Setting, 0, len(sett))
 
 	for _, rawSetting := range sett {
 		setting := models.Setting{

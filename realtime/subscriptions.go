@@ -12,19 +12,16 @@ import (
 //
 // https://rocket.chat/docs/developer-guides/realtime-api/subscriptions/stream-room-messages/
 func (c *Client) Sub(name string, args ...interface{}) (chan string, error) {
-
 	if args == nil {
 		log.Println("no args passed")
 		if err := c.ddp.Sub(name); err != nil {
 			return nil, err
 		}
-	} else {
-		if err := c.ddp.Sub(name, args[0], false); err != nil {
-			return nil, err
-		}
+	} else if err := c.ddp.Sub(name, args[0], false); err != nil {
+		return nil, err
 	}
 
-	msgChannel := make(chan string, default_buffer_size)
+	msgChannel := make(chan string, defaultBufferSize)
 	c.ddp.CollectionByName("stream-room-messages").AddUpdateListener(genericExtractor{msgChannel, "update"})
 
 	return msgChannel, nil

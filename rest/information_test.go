@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/common_testing"
 	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/common_testing"
 )
 
 func TestRocket_GetServerInfo(t *testing.T) {

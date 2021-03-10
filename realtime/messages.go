@@ -7,23 +7,23 @@ import (
 	"time"
 
 	"github.com/Jeffail/gabs"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/gopackage/ddp"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 const (
 	// RocketChat doesn't send the `added` event for new messages by default, only `changed`.
-	send_added_event    = true
-	default_buffer_size = 100
+	sendAddedEvent    = true
+	defaultBufferSize = 100
 )
 
 var messageListenerAdded = false
 
 // NewMessage creates basic message with an ID, a RoomID, and a Msg
-// Takes channel and text
+// Takes channel and text.
 func (c *Client) NewMessage(channel *models.Channel, text string) *models.Message {
 	return &models.Message{
-		ID:     c.newRandomId(),
+		ID:     c.newRandomID(),
 		RoomID: channel.ID,
 		Msg:    text,
 	}
@@ -55,7 +55,7 @@ func (c *Client) LoadHistory(roomID string) ([]models.Message, error) {
 		messages[i] = *getMessageFromDocument(arg)
 	}
 
-	//log.Println(messages)
+	// log.Println(messages)
 
 	return messages, nil
 }
@@ -65,7 +65,6 @@ func (c *Client) LoadHistory(roomID string) ([]models.Message, error) {
 //
 // https://rocket.chat/docs/developer-guides/realtime-api/method-calls/send-message
 func (c *Client) SendMessage(message *models.Message) (*models.Message, error) {
-
 	rawResponse, err := c.ddp.Call("sendMessage", message)
 	if err != nil {
 		return nil, err
@@ -184,8 +183,7 @@ func (c *Client) UnPinMessage(message *models.Message) error {
 //
 // https://rocket.chat/docs/developer-guides/realtime-api/subscriptions/stream-room-messages/
 func (c *Client) SubscribeToMessageStream(channel *models.Channel, msgChannel chan models.Message) error {
-
-	if err := c.ddp.Sub("stream-room-messages", channel.ID, send_added_event); err != nil {
+	if err := c.ddp.Sub("stream-room-messages", channel.ID, sendAddedEvent); err != nil {
 		return err
 	}
 
@@ -248,11 +246,11 @@ func stringOrZero(i interface{}) string {
 		return ""
 	}
 
-	switch i.(type) {
+	switch v := i.(type) {
 	case string:
-		return i.(string)
+		return v
 	case float64:
-		return fmt.Sprintf("%f", i.(float64))
+		return fmt.Sprintf("%f", v)
 	default:
 		return ""
 	}

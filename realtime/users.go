@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/Jeffail/gabs"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 type ddpLoginRequest struct {
@@ -30,7 +30,6 @@ type ddpPassword struct {
 // RegisterUser a new user on the server. This function does not need a logged in user. The registered user gets logged in
 // to set its username.
 func (c *Client) RegisterUser(credentials *models.UserCredentials) (*models.User, error) {
-
 	if _, err := c.ddp.Call("registerUser", credentials); err != nil {
 		return nil, err
 	}
@@ -92,7 +91,7 @@ func getUserFromData(data interface{}) *models.User {
 	}
 }
 
-// SetPresence set user presence
+// SetPresence set user presence.
 func (c *Client) SetPresence(status string) error {
 	_, err := c.ddp.Call("UserPresence:setDefaultStatus", status)
 	if err != nil {

@@ -4,9 +4,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/common_testing"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/common_testing"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 var (
@@ -14,7 +14,6 @@ var (
 )
 
 func getLoggedInClient(t *testing.T) *Client {
-
 	if client == nil {
 		c, err := NewClient(&url.URL{Host: common_testing.Host + ":" + common_testing.Port}, true)
 		assert.Nil(t, err, "Couldn't create realtime client")

@@ -3,8 +3,8 @@ package rest
 import (
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 func TestRocket_SendAndReceive(t *testing.T) {

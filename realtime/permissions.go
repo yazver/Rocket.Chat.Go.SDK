@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/Jeffail/gabs"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 // GetPermissions gets permissions
@@ -20,7 +20,7 @@ func (c *Client) GetPermissions() ([]models.Permission, error) {
 
 	perms, _ := document.Children()
 
-	var permissions []models.Permission
+	permissions := make([]models.Permission, 0, len(perms))
 
 	for _, permission := range perms {
 		var roles []string
@@ -49,6 +49,10 @@ func (c *Client) GetUserRoles() error {
 	document, _ := gabs.Consume(rawResponse)
 
 	roles, err := document.Children()
+	if err != nil {
+		return err
+	}
+
 	// TODO: Figure out if this function is even useful if so return it
 	log.Println(roles)
 

@@ -4,10 +4,10 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/common_testing"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/realtime"
 	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/common_testing"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/realtime"
 )
 
 var (

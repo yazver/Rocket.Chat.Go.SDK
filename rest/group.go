@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 type GroupsResponse struct {

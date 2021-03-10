@@ -1,4 +1,4 @@
-//Package realtime provides access to Rocket.Chat's realtime API via ddp
+// Package realtime provides access to Rocket.Chat's realtime API via ddp
 package realtime
 
 import (
@@ -17,7 +17,7 @@ type Client struct {
 	sf  *sonyflake.Sonyflake
 }
 
-//NewClient creates a new instance and connects to the websocket.
+// NewClient creates a new instance and connects to the websocket.
 func NewClient(serverURL *url.URL, debug bool) (*Client, error) {
 	sf := sonyflake.NewSonyflake(sonyflake.Settings{})
 	if sf == nil {
@@ -71,7 +71,7 @@ func (c *Client) Reconnect() {
 	c.ddp.Reconnect()
 }
 
-// ConnectionAway sets connection status to away
+// ConnectionAway sets connection status to away.
 func (c *Client) ConnectionAway() error {
 	_, err := c.ddp.Call("UserPresence:away")
 	if err != nil {
@@ -81,7 +81,7 @@ func (c *Client) ConnectionAway() error {
 	return nil
 }
 
-// ConnectionOnline sets connection status to online
+// ConnectionOnline sets connection status to online.
 func (c *Client) ConnectionOnline() error {
 	_, err := c.ddp.Call("UserPresence:online")
 	if err != nil {
@@ -91,13 +91,13 @@ func (c *Client) ConnectionOnline() error {
 	return nil
 }
 
-// Close closes the ddp session
+// Close closes the ddp session.
 func (c *Client) Close() {
 	c.ddp.Close()
 }
 
-// Some of the rocketchat objects need unique IDs specified by the client
-func (c *Client) newRandomId() string {
+// Some of the rocketchat objects need unique IDs specified by the client.
+func (c *Client) newRandomID() string {
 	id, err := c.sf.NextID()
 	if err != nil {
 		log.Fatalf("failed to create a unique id: %v", err.Error())

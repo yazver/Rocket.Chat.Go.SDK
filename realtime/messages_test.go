@@ -3,8 +3,8 @@ package realtime
 import (
 	"testing"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 func TestClient_SubscribeToMessageStream(t *testing.T) {
@@ -56,7 +56,6 @@ func sendAndAssertNoError(t *testing.T, c *Client, message *models.Message) {
 }
 
 func TestClient_SubscribeToMessageStream_UnknownChannel(t *testing.T) {
-
 	c := getLoggedInClient(t)
 	channel := models.Channel{ID: "unknown"}
 	messageChannel := make(chan models.Message, 1)

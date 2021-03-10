@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
+	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
 
 type MessagesResponse struct {
@@ -30,7 +30,7 @@ func (c *Client) Send(channel *models.Channel, msg string) error {
 	return c.Post("chat.postMessage", bytes.NewBufferString(body), new(MessageResponse))
 }
 
-// PostMessage send a message to a channel. The channel or roomId has to be not nil.
+// PostMessage send a message to a channel. The channel or roomID has to be not nil.
 // The message will be json encode.
 //
 // https://rocket.chat/docs/developer-guides/rest-api/chat/postmessage
