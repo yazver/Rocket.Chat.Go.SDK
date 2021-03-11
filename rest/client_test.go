@@ -54,12 +54,12 @@ func findMessage(messages []models.Message, user string, msg string) *models.Mes
 	return nil
 }
 
-func getChannel(channels []models.Channel, name string) *models.Channel {
-	for _, r := range channels {
-		if r.Name == name {
-			return &r
-		}
-	}
+// func getChannel(channels []models.Channel, name string) *models.Channel {
+// 	for _, r := range channels {
+// 		if r.Name == name {
+// 			return &r
+// 		}
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

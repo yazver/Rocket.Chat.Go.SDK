@@ -43,18 +43,6 @@ func (c *Client) GetPublicChannels() (*ChannelsResponse, error) {
 	return response, nil
 }
 
-// GetPrivateGroups returns all channels that can be seen by the logged in user.
-//
-// https://rocket.chat/docs/developer-guides/rest-api/groups/list
-func (c *Client) GetPrivateGroups() (*GroupsResponse, error) {
-	response := new(GroupsResponse)
-	if err := c.Get("groups.list", nil, response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
-}
-
 // GetJoinedChannels returns all channels that the user has joined.
 //
 // https://rocket.chat/docs/developer-guides/rest-api/channels/list-joined

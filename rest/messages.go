@@ -37,12 +37,12 @@ func (c *Client) Send(channel *models.Channel, msg string) error {
 func (c *Client) PostMessage(msg *models.PostMessage) (*MessageResponse, error) {
 	body, err := json.Marshal(msg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling post message request data: %w", err)
 	}
 
 	response := new(MessageResponse)
 	err = c.Post("chat.postMessage", bytes.NewBuffer(body), response)
-	return response, err
+	return response, fmt.Errorf("post message: %w", err)
 }
 
 // Get messages from a channel. The channel id has to be not nil. Optionally a
@@ -60,7 +60,7 @@ func (c *Client) GetMessages(channel *models.Channel, page *models.Pagination) (
 
 	response := new(MessagesResponse)
 	if err := c.Get("channels.history", params, response); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("channel messages: %w", err)
 	}
 
 	return response.Messages, nil

@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 
 	"github.com/yazver/Rocket.Chat.Go.SDK/models"
 )
@@ -22,12 +23,12 @@ type UpdatePermissionsResponse struct {
 func (c *Client) UpdatePermissions(req *UpdatePermissionsRequest) (*UpdatePermissionsResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling permissions request data: %w", err)
 	}
 
 	response := new(UpdatePermissionsResponse)
 	if err := c.Post("permissions.update", bytes.NewBuffer(body), response); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("update permissions: %w", err)
 	}
 	return response, nil
 }

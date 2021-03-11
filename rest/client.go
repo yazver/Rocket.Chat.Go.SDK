@@ -122,7 +122,7 @@ func (c *Client) doRequest(method, api string, params url.Values, body io.Reader
 
 	request, err := http.NewRequest(method, c.getURL()+"/"+api, body)
 	if err != nil {
-		return err
+		return fmt.Errorf("new request: %w", err)
 	}
 
 	if method == http.MethodGet {
@@ -145,7 +145,7 @@ func (c *Client) doRequest(method, api string, params url.Values, body io.Reader
 	resp, err := http.DefaultClient.Do(request)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("do request: %w", err)
 	}
 
 	defer resp.Body.Close()
@@ -165,11 +165,11 @@ func (c *Client) doRequest(method, api string, params url.Values, body io.Reader
 		if parse {
 			return response.OK()
 		}
-		return errors.New("Request error: " + resp.Status)
+		return errors.New("request error: " + resp.Status)
 	}
 
 	if err != nil {
-		return err
+		return fmt.Errorf("reading request body: %w", err)
 	}
 
 	return response.OK()

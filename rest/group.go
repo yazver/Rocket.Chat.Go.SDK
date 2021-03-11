@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 
@@ -30,17 +31,15 @@ type GroupMessagesResponse = ChannelMessagesResponse
 func (c *Client) CreateGroup(group *models.CreateGroupRequest) (*models.Group, error) {
 	body, err := json.Marshal(group)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling group request data: %w", err)
 	}
 
 	response := new(GroupResponse)
-
 	err = c.Post("groups.create", bytes.NewBuffer(body), response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("creating group: %w", err)
 	}
-
-	return &response.Group, err
+	return &response.Group, nil
 }
 
 // DeleteGroup remove a private channel.
@@ -55,16 +54,19 @@ func (c *Client) DeleteGroup(group *models.Group) error {
 //
 // https://docs.rocket.chat/api/rest-api/methods/groups/info
 func (c *Client) GetGroupInfo(group *models.Group) (*models.Group, error) {
-	response := new(GroupResponse)
+	if group.Name == "" && group.ID == "" {
+		return nil, errors.New("group.Name or group.ID must be set")
+	}
+	params := url.Values{}
 	switch {
-	case group.Name != "" && group.ID == "":
-		if err := c.Get("groups.info", url.Values{"roomName": []string{group.Name}}, response); err != nil {
-			return nil, err
-		}
+	case group.Name != "":
+		params.Add("roomName", group.Name)
 	default:
-		if err := c.Get("groups.info", url.Values{"roomId": []string{group.ID}}, response); err != nil {
-			return nil, err
-		}
+		params.Add("roomId", group.ID)
+	}
+	response := new(GroupResponse)
+	if err := c.Get("groups.info", params, response); err != nil {
+		return nil, err
 	}
 
 	return &response.Group, nil
@@ -76,17 +78,15 @@ func (c *Client) GetGroupInfo(group *models.Group) (*models.Group, error) {
 func (c *Client) InviteGroup(group *models.InviteGroupRequest) (*models.Group, error) {
 	body, err := json.Marshal(group)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling invite group request data: %w", err)
 	}
 
 	response := new(GroupResponse)
-
 	err = c.Post("groups.invite", bytes.NewBuffer(body), response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("inviting to group: %w", err)
 	}
-
-	return &response.Group, err
+	return &response.Group, nil
 }
 
 // Removes a user from the private group.
@@ -95,17 +95,15 @@ func (c *Client) InviteGroup(group *models.InviteGroupRequest) (*models.Group, e
 func (c *Client) KickGroup(group *models.InviteGroupRequest) (*models.Group, error) {
 	body, err := json.Marshal(group)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling kick group request data: %w", err)
 	}
 
 	response := new(GroupResponse)
-
 	err = c.Post("groups.kick", bytes.NewBuffer(body), response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("kicking from group: %w", err)
 	}
-
-	return &response.Group, err
+	return &response.Group, nil
 }
 
 // LeaveGroup remove a private channel.
@@ -122,15 +120,31 @@ func (c *Client) LeaveGroup(group *models.Group) error {
 func (c *Client) ListGroup() ([]models.Group, error) {
 	response := new(GroupsResponse)
 	err := c.Get("groups.list", nil, response)
-	return response.Groups, err
+	if err != nil {
+		return nil, fmt.Errorf("groups list: %w", err)
+	}
+	return response.Groups, nil
 }
 
-// MembersGroup remove a private channel.
+// MembersGroup lists the users of participants of a private group.
 //
-// https://docs.rocket.chat/api/rest-api/methods/groups/list
+// https://docs.rocket.chat/api/rest-api/methods/groups/members
 func (c *Client) MembersGroup(group *models.Group) ([]models.User, error) {
+	if group.Name == "" && group.ID == "" {
+		return nil, errors.New("group.Name or group.ID must be set")
+	}
+	params := url.Values{}
+	switch {
+	case group.Name != "":
+		params.Add("roomName", group.Name)
+	default:
+		params.Add("roomId", group.ID)
+	}
 	response := new(GroupMembersResponse)
 	err := c.Get("groups.members", url.Values{"roomId": []string{group.ID}}, response)
+	if err != nil {
+		return nil, fmt.Errorf("group members: %w", err)
+	}
 	return response.Members, err
 }
 
@@ -148,17 +162,15 @@ func (c *Client) SetAnnouncementGroup(groupID, announcement string) error {
 func (c *Client) AddOwnerGroup(group *models.InviteGroupRequest) (*models.Group, error) {
 	body, err := json.Marshal(group)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling owner group request data: %w", err)
 	}
 
 	response := new(GroupResponse)
-
 	err = c.Post("groups.addOwner", bytes.NewBuffer(body), response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("adding owner to group: %w", err)
 	}
-
-	return &response.Group, err
+	return &response.Group, nil
 }
 
 // RemoveOwnerGroup removes the role of owner from a user in the current Group.
@@ -167,17 +179,15 @@ func (c *Client) AddOwnerGroup(group *models.InviteGroupRequest) (*models.Group,
 func (c *Client) RemoveOwnerGroup(group *models.InviteGroupRequest) (*models.Group, error) {
 	body, err := json.Marshal(group)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling owner group request data: %w", err)
 	}
 
 	response := new(GroupResponse)
-
 	err = c.Post("groups.removeOwner", bytes.NewBuffer(body), response)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("removing owner from group: %w", err)
 	}
-
-	return &response.Group, err
+	return &response.Group, nil
 }
 
 // HistoryGroup retrieves the messages from a private group, only if you're part of the group.
@@ -186,7 +196,10 @@ func (c *Client) RemoveOwnerGroup(group *models.InviteGroupRequest) (*models.Gro
 func (c *Client) HistoryGroup(group *models.Group) ([]models.Message, error) {
 	response := new(GroupMessagesResponse)
 	err := c.Get("groups.history", url.Values{"roomId": []string{group.ID}}, response)
-	return response.Messages, err
+	if err != nil {
+		return nil, fmt.Errorf("group history: %w", err)
+	}
+	return response.Messages, nil
 }
 
 // MessagesGroup Lists all of the specific group messages on the server. It supports the Offset, Count, and Sort Query Parameters along with Query and Fields Query Parameters.
@@ -195,5 +208,8 @@ func (c *Client) HistoryGroup(group *models.Group) ([]models.Message, error) {
 func (c *Client) MessagesGroup(group *models.Group) ([]models.Message, error) {
 	response := new(GroupMessagesResponse)
 	err := c.Get("groups.messages", url.Values{"roomId": []string{group.ID}}, response)
-	return response.Messages, err
+	if err != nil {
+		return nil, fmt.Errorf("group messages: %w", err)
+	}
+	return response.Messages, nil
 }
