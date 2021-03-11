@@ -3,6 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"time"
@@ -25,6 +26,10 @@ type logonResponse struct {
 	} `json:"data"`
 }
 
+type UserResponse struct {
+	Status
+	User models.User `json:"user"`
+}
 type CreateUserResponse struct {
 	Status
 	User struct {
@@ -110,12 +115,15 @@ func (c *Client) Logout() (string, error) {
 func (c *Client) CreateUser(req *models.CreateUserRequest) (*CreateUserResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling create user request data: %w", err)
 	}
 
 	response := new(CreateUserResponse)
 	err = c.Post("users.create", bytes.NewBuffer(body), response)
-	return response, err
+	if err != nil {
+		return nil, fmt.Errorf("create user: %w", err)
+	}
+	return response, nil
 }
 
 // UpdateUser updates a user's data being logged in with a user that has permission to do so.
@@ -124,7 +132,7 @@ func (c *Client) CreateUser(req *models.CreateUserRequest) (*CreateUserResponse,
 func (c *Client) UpdateUser(req *models.UpdateUserRequest) (*CreateUserResponse, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshaling update user request data: %w", err)
 	}
 
 	response := new(CreateUserResponse)
@@ -141,4 +149,27 @@ func (c *Client) SetUserAvatar(userID, username, avatarURL string) (*Status, err
 	response := new(Status)
 	err := c.Post("users.setAvatar", bytes.NewBufferString(body), response)
 	return response, err
+}
+
+// GetUserInfo get information about a channel. That might be useful to update the usernames.
+//
+// https://rocket.chat/docs/developer-guides/rest-api/channels/info
+func (c *Client) GetUserInfo(user *models.User) (*models.User, error) {
+	if user.UserName == "" && user.ID == "" {
+		return nil, errors.New("user.UserName or user.ID must be set")
+	}
+	params := url.Values{}
+	switch {
+	case user.UserName != "":
+		params.Add("username", user.UserName)
+	default:
+		params.Add("userId", user.ID)
+	}
+
+	response := new(UserResponse)
+	if err := c.Get("users.info", params, response); err != nil {
+		return nil, err
+	}
+
+	return &response.User, nil
 }
